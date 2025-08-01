@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz Results - {{ quiz_session.topic }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8">
+        <!-- Results Header -->
+        <div class="card mb-4">
+            <div class="card-header text-center">
+                <h2><i class="fas fa-trophy me-2"></i>Quiz Completed!</h2>
+                <p class="mb-0 text-muted">{{ quiz_session.topic }} - {{ quiz_session.student_name }}</p>
+            </div>
+            <div class="card-body text-center">
+                <div class="row">
+                    <div class="col-md-3 col-6 mb-3">
+                        <div class="stat-card">
+                            <h3 class="text-primary">{{ "%.1f"|format(quiz_session.score_percentage) }}%</h3>
+                            <p class="mb-0 text-muted">Final Score</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6 mb-3">
+                        <div class="stat-card">
+                            <h3 class="text-success">{{ quiz_session.correct_answers }}</h3>
+                            <p class="mb-0 text-muted">Correct</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6 mb-3">
+                        <div class="stat-card">
+                            <h3 class="text-danger">{{ quiz_session.total_questions - quiz_session.correct_answers }}</h3>
+                            <p class="mb-0 text-muted">Incorrect</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6 mb-3">
+                        <div class="stat-card">
+                            <h3 class="text-info">{{ "%.1f"|format(quiz_session.get_duration_minutes()) }}</h3>
+                            <p class="mb-0 text-muted">Minutes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Chart -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-pie me-2"></i>Performance Overview</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <canvas id="performanceChart" width="300" height="300"></canvas>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="performance-stats">
+                            <h6>Performance Analysis</h6>
+                            {% if quiz_session.score_percentage >= 80 %}
+                                <div class="alert alert-success">
+                                    <i class="fas fa-star me-2"></i>Excellent work! You've demonstrated strong understanding of the topic.
+                                </div>
+                            {% elif quiz_session.score_percentage >= 60 %}
+                                <div class="alert alert-info">
+                                    <i class="fas fa-thumbs-up me-2"></i>Good job! You have a solid grasp of the material.
+                                </div>
+                            {% else %}
+                                <div class="alert alert-warning">
+                                    <i class="fas fa-book me-2"></i>Keep studying! There's room for improvement.
+                                </div>
+                            {% endif %}
+                            
+                            <ul class="list-unstyled mt-3">
+                                <li><strong>Accuracy:</strong> {{ "%.1f"|format(quiz_session.score_percentage) }}%</li>
+                                <li><strong>Time per question:</strong> {{ "%.1f"|format(quiz_session.get_duration_minutes() / quiz_session.total_questions) }} min</li>
+                                <li><strong>Total questions:</strong> {{ quiz_session.total_questions }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question Review -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5><i class="fas fa-list me-2"></i>Question Review</h5>
+            </div>
+            <div class="card-body">
+                {% for question in questions %}
+                <div class="question-review mb-4 {% if not loop.last %}border-bottom pb-4{% endif %}">
+                    <div class="row">
+                        <div class="col-auto">
+                            {% if question.is_correct %}
+                                <i class="fas fa-check-circle text-success fs-4"></i>
+                            {% else %}
+                                <i class="fas fa-times-circle text-danger fs-4"></i>
+                            {% endif %}
+                        </div>
+                        <div class="col">
+                            <h6>Question {{ question.question_number }}: {{ question.question_text }}</h6>
+                            
+                            <div class="mt-2">
+                                {% for option_key, option_value in question.get_options().items() %}
+                                <div class="option-review mb-1 p-2 rounded
+                                    {% if option_key == question.correct_answer %}bg-success bg-opacity-25
+                                    {% elif option_key == question.student_answer and not question.is_correct %}bg-danger bg-opacity-25
+                                    {% endif %}">
+                                    <strong>{{ option_key }}.</strong> {{ option_value }}
+                                    {% if option_key == question.correct_answer %}
+                                        <i class="fas fa-check text-success ms-2"></i>
+                                    {% elif option_key == question.student_answer and not question.is_correct %}
+                                        <i class="fas fa-times text-danger ms-2"></i>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            
+                            {% if question.student_answer %}
+                                <small class="text-muted">
+                                    Your answer: <strong>{{ question.student_answer }}</strong>
+                                    {% if question.is_correct %}
+                                        <span class="text-success">(Correct!)</span>
+                                    {% else %}
+                                        <span class="text-danger">(Incorrect - Correct answer: {{ question.correct_answer }})</span>
+                                    {% endif %}
+                                </small>
+                            {% else %}
+                                <small class="text-warning">No answer provided</small>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="text-center">
+            <a href="{{ url_for('index') }}" class="btn btn-primary me-2">
+                <i class="fas fa-plus me-2"></i>Take Another Quiz
+            </a>
+            <a href="{{ url_for('history') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-history me-2"></i>View All Results
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+// Load performance chart
+document.addEventListener('DOMContentLoaded', function() {
+    loadPerformanceChart({{ quiz_session.id }});
+});
+</script>
+{% endblock %}

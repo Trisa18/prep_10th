@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz - {{ quiz_session.topic }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8">
+        <!-- Quiz Header -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h4 class="mb-0">{{ quiz_session.topic }}</h4>
+                        <small class="text-muted">Student: {{ quiz_session.student_name }}</small>
+                    </div>
+                    <div class="col-auto">
+                        <span class="badge bg-info fs-6">
+                            Question {{ current_question }} of {{ quiz_session.total_questions }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="mb-4">
+            <div class="progress" style="height: 8px;">
+                <div class="progress-bar" role="progressbar" 
+                     style="width: {{ (current_question / quiz_session.total_questions) * 100 }}%">
+                </div>
+            </div>
+        </div>
+
+        <!-- Question Card -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-question-circle me-2"></i>Question {{ current_question }}
+                </h5>
+            </div>
+            <div class="card-body">
+                <h6 class="card-title mb-4">{{ question.question_text }}</h6>
+                
+                <form method="POST" action="{{ url_for('submit_answer') }}">
+                    <div class="row">
+                        {% for option_key, option_value in question.get_options().items() %}
+                        <div class="col-12 mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="answer" 
+                                       id="option{{ option_key }}" value="{{ option_key }}" required>
+                                <label class="form-check-label w-100" for="option{{ option_key }}">
+                                    <div class="option-card p-3 border rounded">
+                                        <strong>{{ option_key }}.</strong> {{ option_value }}
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            {% if current_question < quiz_session.total_questions %}
+                                <i class="fas fa-arrow-right me-2"></i>Next Question
+                            {% else %}
+                                <i class="fas fa-flag-checkered me-2"></i>Finish Quiz
+                            {% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Quiz Navigation -->
+        <div class="text-center mt-4">
+            <small class="text-muted">
+                Make sure to read each question carefully before selecting your answer.
+            </small>
+        </div>
+    </div>
+</div>
+
+<!-- Loading overlay for transitions -->
+<div id="loadingOverlay" class="loading-overlay d-none">
+    <div class="text-center">
+        <div class="spinner-border text-light" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2 text-light">Processing your answer...</p>
+    </div>
+</div>
+{% endblock %}
