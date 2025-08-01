@@ -1,4 +1,4 @@
-setuptools=>65.0.0
+setuptools>=65.0.0
 wheel
 absl-py==2.3.0
 aiohappyeyeballs==2.4.6
