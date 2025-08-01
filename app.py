@@ -5,6 +5,11 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
 from werkzeug.middleware.proxy_fix import ProxyFix
 
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
 
