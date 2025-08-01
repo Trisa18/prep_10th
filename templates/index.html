@@ -8,7 +8,7 @@
         <div class="card">
             <div class="card-header text-center">
                 <h2><i class="fas fa-brain me-2"></i>Start a New Quiz</h2>
-                <p class="mb-0 text-muted">Test your knowledge with AI-generated questions</p>
+                <p class="mb-0 text-muted">Class 10 level AI-generated questions for comprehensive learning</p>
             </div>
             <div class="card-body">
                 <form method="POST" action="{{ url_for('start_quiz') }}">
@@ -25,8 +25,8 @@
                             <i class="fas fa-book me-1"></i>Quiz Topic
                         </label>
                         <input type="text" class="form-control" id="topic" name="topic" 
-                               placeholder="e.g., Python Programming, World History, Biology" required>
-                        <div class="form-text">Enter any topic you'd like to be quizzed on</div>
+                               placeholder="e.g., Mathematics, Physics, Chemistry, Biology, History" required>
+                        <div class="form-text">Enter any Class 10 curriculum topic for AI-generated questions</div>
                     </div>
                     
                     <div class="mb-4">
@@ -58,33 +58,48 @@
             <div class="card-body">
                 <div class="row g-2">
                     <div class="col-6 col-md-4">
-                        <button class="btn btn-outline-secondary btn-sm w-100 topic-btn" data-topic="Python Programming">
-                            Python Programming
-                        </button>
-                    </div>
-                    <div class="col-6 col-md-4">
-                        <button class="btn btn-outline-secondary btn-sm w-100 topic-btn" data-topic="World History">
-                            World History
-                        </button>
-                    </div>
-                    <div class="col-6 col-md-4">
-                        <button class="btn btn-outline-secondary btn-sm w-100 topic-btn" data-topic="Mathematics">
+                        <button class="btn btn-outline-secondary btn-sm w-100 topic-btn" data-topic="Mathematics - Class 10">
                             Mathematics
                         </button>
                     </div>
                     <div class="col-6 col-md-4">
-                        <button class="btn btn-outline-secondary btn-sm w-100 topic-btn" data-topic="Biology">
+                        <button class="btn btn-outline-secondary btn-sm w-100 topic-btn" data-topic="Science - Physics">
+                            Physics
+                        </button>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <button class="btn btn-outline-secondary btn-sm w-100 topic-btn" data-topic="Science - Chemistry">
+                            Chemistry
+                        </button>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <button class="btn btn-outline-secondary btn-sm w-100 topic-btn" data-topic="Science - Biology">
                             Biology
                         </button>
                     </div>
                     <div class="col-6 col-md-4">
-                        <button class="btn btn-outline-secondary btn-sm w-100 topic-btn" data-topic="Literature">
-                            Literature
+                        <button class="btn btn-outline-secondary btn-sm w-100 topic-btn" data-topic="Social Science - History">
+                            History
                         </button>
                     </div>
                     <div class="col-6 col-md-4">
-                        <button class="btn btn-outline-secondary btn-sm w-100 topic-btn" data-topic="Geography">
+                        <button class="btn btn-outline-secondary btn-sm w-100 topic-btn" data-topic="Social Science - Geography">
                             Geography
+                        </button>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <button class="btn btn-outline-secondary btn-sm w-100 topic-btn" data-topic="English - Literature">
+                            English
+                        </button>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <button class="btn btn-outline-secondary btn-sm w-100 topic-btn" data-topic="Hindi - Class 10">
+                            Hindi
+                        </button>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <button class="btn btn-outline-secondary btn-sm w-100 topic-btn" data-topic="Social Science - Economics">
+                            Economics
                         </button>
                     </div>
                 </div>
